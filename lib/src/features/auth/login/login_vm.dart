@@ -2,6 +2,7 @@ import 'package:asyncstate/class/async_loader_handler.dart';
 import 'package:dw_barbershop/src/core/exceptions/service_exception.dart';
 import 'package:dw_barbershop/src/core/fp/either.dart';
 import 'package:dw_barbershop/src/core/providers/application_providers.dart';
+import 'package:dw_barbershop/src/model/user_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:dw_barbershop/src/features/auth/login/login_state.dart';
@@ -24,6 +25,13 @@ class LoginVm extends _$LoginVm {
       case Success():
         // buscar dados do usuário logado
         // fazer uma analise para qual tipo do login
+        final userModel = await ref.read(getMeProvider.future);
+        switch (userModel) {
+          case UserModelADM():
+            state = state.copyWith(status: LoginStateStatus.admLogin);
+          case UserModelEmployee():
+            state = state.copyWith(status: LoginStateStatus.employeeLogin);
+        }
 
         break;
       case Failure(exception: ServiceException(:final message)):
