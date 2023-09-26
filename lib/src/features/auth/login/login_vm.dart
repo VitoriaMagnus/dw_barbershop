@@ -23,8 +23,9 @@ class LoginVm extends _$LoginVm {
 
     switch (result) {
       case Success():
-        // buscar dados do usuário logado
-        // fazer uma analise para qual tipo do login
+        // Invalidando os caches para evitar o login com o usuário errado
+        ref.invalidate(getMeProvider);
+        ref.invalidate(getMyBarbershopProvider);
         final userModel = await ref.read(getMeProvider.future);
         switch (userModel) {
           case UserModelADM():
